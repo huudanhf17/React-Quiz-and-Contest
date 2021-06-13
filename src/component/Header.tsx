@@ -13,6 +13,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     flexGrow: 1,
     backgroundColor: "transparent",
     height: "80px",
+    minHeight: "7.407vh",
   },
   logo: {
     maxHeight: "60px",
