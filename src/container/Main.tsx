@@ -2,11 +2,16 @@ import { ReactElement } from "react";
 import { Switch, Route } from "react-router-dom";
 import Home from "./Home";
 
-const Main = (): ReactElement => {
+interface Props {
+  handleClickOpen: () => void;
+}
+
+const Main = (props: Props): ReactElement => {
+  const { handleClickOpen } = props;
   return (
     <Switch>
       <Route path="/">
-        <Home></Home>
+        <Home handleClickOpen={handleClickOpen}></Home>
       </Route>
     </Switch>
   );

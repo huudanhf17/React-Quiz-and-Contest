@@ -5,7 +5,7 @@ import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import { Link } from "react-router-dom";
 import Grid from "@material-ui/core/Grid";
-import Button from "./Button";
+import Button from "../component/Button";
 import logo from "../logo.png";
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -33,7 +33,12 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-export default function Header() {
+interface Props {
+  handleClickOpen: () => void;
+}
+
+export default function Header(props: Props) {
+  const { handleClickOpen } = props;
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
 
@@ -42,7 +47,7 @@ export default function Header() {
   };
 
   const toggle = () => {
-    console.log("toggle");
+    handleClickOpen();
   };
 
   return (

@@ -1,7 +1,7 @@
 import { ReactElement } from "react";
 import "./App.css";
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
-import Layout from "./component/Layout";
+import Layout from "./container/Layout";
 
 const theme = createMuiTheme({
   palette: {

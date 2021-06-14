@@ -4,6 +4,7 @@ import { Box, Grid, Typography } from "@material-ui/core";
 import Button from "../component/Button";
 
 const Home = (props: any): ReactElement => {
+  const { handleClickOpen } = props;
   const style = { minHeight: "85.186vh" };
   return (
     <Grid container justify="center" alignItems="center" style={style}>
@@ -22,7 +23,9 @@ const Home = (props: any): ReactElement => {
           </Typography>
         </Box>
         <Box m={1} mb={5}>
-          <Button>Login to your account</Button>
+          <Button spanSize={18} minWidth={280} onClick={handleClickOpen}>
+            Login to your account
+          </Button>
         </Box>
       </Grid>
     </Grid>
