@@ -1,19 +1,30 @@
 import React from "react";
-import { makeStyles, Theme } from "@material-ui/core/styles";
-import AppBar from "@material-ui/core/AppBar";
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
-import { Link } from "react-router-dom";
-import Grid from "@material-ui/core/Grid";
+import { Link, useLocation } from "react-router-dom";
 import Button from "../component/Button";
 import logo from "../logo.png";
+import { makeStyles, Theme } from "@material-ui/core/styles";
+import {
+  Button as MButton,
+  AppBar,
+  Tabs,
+  Tab,
+  Grid,
+  Avatar,
+  Grow,
+  Paper,
+  Popper,
+  MenuItem,
+  MenuList,
+  Box,
+  ClickAwayListener,
+} from "@material-ui/core/";
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
     flexGrow: 1,
     backgroundColor: "transparent",
-    height: "80px",
-    minHeight: "7.407vh",
+    minHeight: "80px",
+    height: "7.407vh",
   },
   logo: {
     maxHeight: "60px",
@@ -30,17 +41,43 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   grid: {
     display: "flex",
+    alignItems: "center",
+  },
+  userRoot: {
+    display: "flex",
+  },
+  paper: {
+    marginRight: theme.spacing(2),
+  },
+  avatar: {
+    marginRight: theme.spacing(1),
   },
 }));
 
 interface Props {
+  user: any;
+  setUser: any;
   handleClickOpen: () => void;
 }
 
 export default function Header(props: Props) {
-  const { handleClickOpen } = props;
+  const { user, setUser, handleClickOpen } = props;
   const classes = useStyles();
+  const location = useLocation();
   const [value, setValue] = React.useState(0);
+  const [open, setOpen] = React.useState(false);
+  const anchorRef = React.useRef<HTMLButtonElement>(null);
+
+  React.useEffect(() => {
+    let pathname = location.pathname;
+    if (pathname === "/result") {
+      setValue(2);
+    } else if (pathname === "/challenge") {
+      setValue(1);
+    } else if (pathname === "/") {
+      setValue(0);
+    }
+  }, [location]);
 
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
     setValue(newValue);
@@ -49,6 +86,39 @@ export default function Header(props: Props) {
   const toggle = () => {
     handleClickOpen();
   };
+
+  const handleToggle = () => {
+    setOpen((prevOpen) => !prevOpen);
+  };
+
+  const handleClose = (event: React.MouseEvent<EventTarget>) => {
+    if (
+      anchorRef.current &&
+      anchorRef.current.contains(event.target as HTMLElement)
+    ) {
+      return;
+    }
+    localStorage.clear();
+    setUser(null);
+    setOpen(false);
+  };
+
+  function handleListKeyDown(event: React.KeyboardEvent) {
+    if (event.key === "Tab") {
+      event.preventDefault();
+      setOpen(false);
+    }
+  }
+
+  // return focus to the button when we transitioned from !open -> open
+  const prevOpen = React.useRef(open);
+  React.useEffect(() => {
+    if (prevOpen.current === true && open === false) {
+      anchorRef.current?.focus();
+    }
+
+    prevOpen.current = open;
+  }, [open]);
 
   return (
     <div className={classes.root}>
@@ -85,7 +155,62 @@ export default function Header(props: Props) {
                 className={classes.tab}
               ></Tab>
             </Tabs>
-            <Button onClick={toggle}>Login</Button>
+            {user ? (
+              <Box mr={2}>
+                <div className={classes.userRoot}>
+                  <div>
+                    <MButton
+                      ref={anchorRef}
+                      aria-controls={open ? "menu-list-grow" : undefined}
+                      aria-haspopup="true"
+                      onClick={handleToggle}
+                    >
+                      <Avatar
+                        alt="avatar"
+                        src={`static/images/avatar/1.jpg`}
+                        className={classes.avatar}
+                      />
+                      {user.id}
+                    </MButton>
+                    <Popper
+                      open={open}
+                      anchorEl={anchorRef.current}
+                      role={undefined}
+                      transition
+                      disablePortal
+                    >
+                      {({ TransitionProps, placement }) => (
+                        <Grow
+                          {...TransitionProps}
+                          style={{
+                            transformOrigin:
+                              placement === "bottom"
+                                ? "center top"
+                                : "center bottom",
+                          }}
+                        >
+                          <Paper>
+                            <ClickAwayListener onClickAway={handleClose}>
+                              <MenuList
+                                autoFocusItem={open}
+                                id="menu-list-grow"
+                                onKeyDown={handleListKeyDown}
+                              >
+                                <MenuItem onClick={handleClose}>
+                                  Logout
+                                </MenuItem>
+                              </MenuList>
+                            </ClickAwayListener>
+                          </Paper>
+                        </Grow>
+                      )}
+                    </Popper>
+                  </div>
+                </div>
+              </Box>
+            ) : (
+              <Button onClick={toggle}>Login</Button>
+            )}
           </Grid>
         </Grid>
       </AppBar>

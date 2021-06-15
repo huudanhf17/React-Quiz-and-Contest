@@ -3,12 +3,9 @@ import { ReactElement } from "react";
 import Header from "./Header";
 import Footer from "../component/Footer";
 import Main from "./Main";
-import { Dialog, Slide } from "@material-ui/core/";
+import { Dialog, Slide, AppBar, Toolbar, IconButton } from "@material-ui/core/";
 import { TransitionProps } from "@material-ui/core/transitions";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import IconButton from "@material-ui/core/IconButton";
 import ArrowBackRoundedIcon from "@material-ui/icons/ArrowBackRounded";
 import Login from "./Login";
 
@@ -36,7 +33,8 @@ const Layout = (): ReactElement => {
   const [open, setOpen] = React.useState(false);
   const [user, setUser] = React.useState(null);
   React.useEffect(() => {
-    setUser(JSON.parse(localStorage.getItem("user") || "{}"));
+    localStorage.getItem("user") &&
+      setUser(JSON.parse(localStorage.getItem("user") || "{}"));
   }, []);
 
   const handleClickOpen = () => {
@@ -49,8 +47,12 @@ const Layout = (): ReactElement => {
 
   return (
     <>
-      <Header handleClickOpen={handleClickOpen}></Header>
-      <Main handleClickOpen={handleClickOpen}></Main>
+      <Header
+        user={user}
+        setUser={setUser}
+        handleClickOpen={handleClickOpen}
+      ></Header>
+      <Main user={user} handleClickOpen={handleClickOpen}></Main>
       <Footer></Footer>
       <Dialog
         fullScreen

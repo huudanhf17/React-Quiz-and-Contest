@@ -1,15 +1,20 @@
 import { ReactElement } from "react";
 import logo from "../logo.png";
-import { Box, Grid, Typography } from "@material-ui/core";
 import React from "react";
 import { createStyles, Theme, makeStyles } from "@material-ui/core/styles";
-import InputAdornment from "@material-ui/core/InputAdornment";
-import FormControl from "@material-ui/core/FormControl";
-import TextField from "@material-ui/core/TextField";
 import PersonRoundedIcon from "@material-ui/icons/PersonRounded";
 import LockRoundedIcon from "@material-ui/icons/LockRounded";
-import { Checkbox, Button as MButton } from "@material-ui/core/";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
+import {
+  Box,
+  Grid,
+  Typography,
+  InputAdornment,
+  FormControl,
+  TextField,
+  FormControlLabel,
+  Checkbox,
+  Button as MButton,
+} from "@material-ui/core/";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -32,7 +37,7 @@ interface Props {
 }
 
 const Login = (props: Props): ReactElement => {
-  const { handleClose, setUser, user } = props;
+  const { handleClose, setUser } = props;
   const classes = useStyles();
   const [checked, setChecked] = React.useState(true);
   const [userName, setUserName] = React.useState("");
@@ -46,10 +51,12 @@ const Login = (props: Props): ReactElement => {
     setUserName(event.target.value);
   };
   const handleSignIn = (event: React.MouseEvent) => {
-    setUser({
+    const newUser = {
       id: userName,
-      remember: checked,
-    });
+    };
+    setUser(newUser);
+    checked && localStorage.setItem("user", JSON.stringify(newUser));
+    handleClose();
   };
   return (
     <Grid container justify="center" alignItems="center" style={style}>
