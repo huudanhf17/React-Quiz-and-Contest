@@ -12,4 +12,6 @@
 - Inline-styles
 - Vanilla JavaScript
 
+- Recommended Resolution: 1920x1080
+
 # You can custom .env file to change color, backend API
