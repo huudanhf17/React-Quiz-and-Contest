@@ -59,10 +59,12 @@ interface Props {
   setUser: any;
   setPosted: any;
   handleClickOpen: () => void;
+  handleClickVariant: any;
 }
 
 export default function Header(props: Props) {
-  const { user, setUser, setPosted, handleClickOpen } = props;
+  const { user, setUser, setPosted, handleClickOpen, handleClickVariant } =
+    props;
   const classes = useStyles();
   const location = useLocation();
   const [value, setValue] = React.useState(0);
@@ -103,6 +105,7 @@ export default function Header(props: Props) {
     setUser(null);
     setOpen(false);
     setPosted(false);
+    handleClickVariant("Logout success", "success");
   };
 
   function handleListKeyDown(event: React.KeyboardEvent) {

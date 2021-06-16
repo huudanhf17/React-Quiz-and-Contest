@@ -64,6 +64,7 @@ const Layout = (): ReactElement => {
         setUser={setUser}
         handleClickOpen={handleClickOpen}
         setPosted={setPosted}
+        handleClickVariant={handleClickVariant}
       ></Header>
       <Main
         user={user}
