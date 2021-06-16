@@ -7,6 +7,7 @@ import { Dialog, Slide, AppBar, Toolbar, IconButton } from "@material-ui/core/";
 import { TransitionProps } from "@material-ui/core/transitions";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import ArrowBackRoundedIcon from "@material-ui/icons/ArrowBackRounded";
+import { VariantType, useSnackbar } from "notistack";
 import Login from "./Login";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -32,9 +33,16 @@ const Layout = (): ReactElement => {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const [user, setUser] = React.useState(null);
+  const [posted, setPosted] = React.useState(false);
+  const [results, setResults] = React.useState([]);
+  const { enqueueSnackbar } = useSnackbar();
+
   React.useEffect(() => {
-    localStorage.getItem("user") &&
+    if (localStorage.getItem("remember")) {
       setUser(JSON.parse(localStorage.getItem("user") || "{}"));
+      setResults(JSON.parse(localStorage.getItem("results") || "[]"));
+    }
+    localStorage.getItem("postedOnce") && setPosted(true);
   }, []);
 
   const handleClickOpen = () => {
@@ -45,14 +53,27 @@ const Layout = (): ReactElement => {
     setOpen(false);
   };
 
+  const handleClickVariant = (content: string, variant: VariantType) => {
+    enqueueSnackbar(content, { variant });
+  };
+
   return (
     <>
       <Header
         user={user}
         setUser={setUser}
         handleClickOpen={handleClickOpen}
+        setPosted={setPosted}
       ></Header>
-      <Main user={user} handleClickOpen={handleClickOpen}></Main>
+      <Main
+        user={user}
+        posted={posted}
+        results={results}
+        handleClickOpen={handleClickOpen}
+        setPosted={setPosted}
+        setResults={setResults}
+        handleClickVariant={handleClickVariant}
+      ></Main>
       <Footer></Footer>
       <Dialog
         fullScreen
@@ -72,7 +93,12 @@ const Layout = (): ReactElement => {
             </IconButton>
           </Toolbar>
         </AppBar>
-        <Login handleClose={handleClose} user={user} setUser={setUser}></Login>
+        <Login
+          handleClose={handleClose}
+          user={user}
+          setUser={setUser}
+          handleClickVariant={handleClickVariant}
+        ></Login>
       </Dialog>
     </>
   );

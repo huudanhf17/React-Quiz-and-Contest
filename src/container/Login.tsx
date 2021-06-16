@@ -37,10 +37,11 @@ interface Props {
 }
 
 const Login = (props: Props): ReactElement => {
-  const { handleClose, setUser } = props;
+  const { handleClose, setUser, handleClickVariant } = props;
   const classes = useStyles();
   const [checked, setChecked] = React.useState(true);
   const [userName, setUserName] = React.useState("");
+  const [pass, setPass] = React.useState("");
   const style = { minHeight: "85.186vh" };
   const imgStyle = { maxWidth: "120px", height: "auto", margin: "12px" };
 
@@ -50,12 +51,27 @@ const Login = (props: Props): ReactElement => {
   const handleChangeUn = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUserName(event.target.value);
   };
+  const handleChangePa = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setPass(event.target.value);
+  };
   const handleSignIn = (event: React.MouseEvent) => {
+    if (!userName.trim()) {
+      handleClickVariant(`Please type your Username`, "warning");
+      return;
+    }
+    if (!pass.trim()) {
+      handleClickVariant(`Please type your Password`, "warning");
+      return;
+    }
     const newUser = {
       id: userName,
     };
     setUser(newUser);
-    checked && localStorage.setItem("user", JSON.stringify(newUser));
+    if (checked) {
+      localStorage.setItem("user", JSON.stringify(newUser));
+      localStorage.setItem("remember", JSON.stringify(true));
+    }
+    handleClickVariant(`Welcome ${userName}`, "success");
     handleClose();
   };
   return (
@@ -100,6 +116,7 @@ const Login = (props: Props): ReactElement => {
                 ),
               }}
               variant="outlined"
+              onChange={handleChangePa}
             />
           </Box>
         </Grid>

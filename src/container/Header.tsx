@@ -57,11 +57,12 @@ const useStyles = makeStyles((theme: Theme) => ({
 interface Props {
   user: any;
   setUser: any;
+  setPosted: any;
   handleClickOpen: () => void;
 }
 
 export default function Header(props: Props) {
-  const { user, setUser, handleClickOpen } = props;
+  const { user, setUser, setPosted, handleClickOpen } = props;
   const classes = useStyles();
   const location = useLocation();
   const [value, setValue] = React.useState(0);
@@ -101,6 +102,7 @@ export default function Header(props: Props) {
     localStorage.clear();
     setUser(null);
     setOpen(false);
+    setPosted(false);
   };
 
   function handleListKeyDown(event: React.KeyboardEvent) {
